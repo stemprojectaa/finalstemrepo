@@ -49,6 +49,7 @@ public class EditMedicineData extends AppCompatActivity implements View.OnClickL
     String cell_phone = "";
     String home_phone = "";
     UserSessionManagement session;
+    DatabaseManagement databaseManagement;
 
     //Date Picker
     Button btnStartDatePicker;
@@ -79,6 +80,7 @@ public class EditMedicineData extends AppCompatActivity implements View.OnClickL
         btnStartDatePicker.setOnClickListener(this);
         btnStartTimePicker.setOnClickListener(this);
         session = new UserSessionManagement(getApplicationContext());
+        databaseManagement = new DatabaseManagement(this);
 
         HashMap<String,String> medicalDetails = session.getMedicalDetails();
         medicine_name = medicalDetails.get(UserSessionManagement.KEY_MEDICINE_NAME);
@@ -178,6 +180,18 @@ public class EditMedicineData extends AppCompatActivity implements View.OnClickL
         dose_amt = inputdosageAmount.getText().toString();
         session.saveMedValues(med_name,dose_amt,txtStartDate.getText().toString(),txtStartTime.getText().toString());
         session.savePhoneValues(txtHomePhone.getText().toString(),txtCellPhone.getText().toString());
+
+        databaseManagement.addMedDetails( new UserDetailsAndMedicalDetails(
+                session.getKeyName()
+                ,session.getKeyPassword()
+                ,session.getKeyEmail()
+                ,med_name
+                ,dose_amt
+                ,txtStartDate.getText().toString()
+                ,txtStartTime.getText().toString()
+                ,txtCellPhone.getText().toString()
+                ,txtHomePhone.getText().toString()
+        ));
         Toast.makeText(getApplicationContext(),"Information is now saved.",Toast.LENGTH_LONG).show();
     }
 

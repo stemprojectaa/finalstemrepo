@@ -50,6 +50,8 @@ public class UserSessionManagement {
     public String username;
     public String password;
     public String email;
+    public String dob;
+    private String gender;
 
     //public static final String str_bitmap;
 
@@ -102,6 +104,21 @@ public class UserSessionManagement {
         return this.email;
     }
 
+    public void setDob(String dob){
+        this.dob = dob;
+    }
+
+    public String getDob(){
+        return this.dob;
+    }
+
+    public void setGender(String gender){
+        this.gender = gender;
+    }
+
+    public String getGender(){
+        return this.gender;
+    }
 
     public void saveMedValues(String medical_name,String dose_amount,String start_date,String start_time){
 

@@ -5,8 +5,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -17,6 +19,9 @@ public class Login extends AppCompatActivity {
     String username;
     String password;
     String email;
+    DatabaseManagement databaseManagement;
+    EditText editTextUser;
+    EditText editTextPwd;
 
 
     @Override
@@ -24,12 +29,16 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        session = new UserSessionManagement(getApplicationContext());
+        //session = new UserSessionManagement(getApplicationContext());
+        databaseManagement = new DatabaseManagement(this);
+        editTextUser = (EditText) findViewById(R.id.username);
+        editTextPwd = (EditText) findViewById(R.id.password);
 
-        HashMap<String,String> userInfo = session.getUserDetails();
-        username = userInfo.get(UserSessionManagement.KEY_NAME);
-        password = userInfo.get(UserSessionManagement.KEY_PASSWORD);
-        email = userInfo.get((UserSessionManagement.KEY_EMAIL));
+
+        //HashMap<String,String> userInfo = session.getUserDetails();
+        //username = userInfo.get(UserSessionManagement.KEY_NAME);
+        //password = userInfo.get(UserSessionManagement.KEY_PASSWORD);
+        //email = userInfo.get((UserSessionManagement.KEY_EMAIL));
 
         Button btnLogin = (Button) findViewById(R.id.login);
         Button btnHome = (Button) findViewById(R.id.btnHome);
@@ -38,11 +47,27 @@ public class Login extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                if (username!=null && password!=null){
+                username = editTextUser.getText().toString();
+                password = editTextPwd.getText().toString();
+
+                Log.d("InsideLogin username:", username);
+                Log.d("InsideLogin password:", password);
+
+                boolean recordExists= databaseManagement.isUserValid(username);
+                if(recordExists)
+                {
+                    Toast.makeText(getApplicationContext(), "User exists, logging in now..", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getApplicationContext(), OptionsScreen.class));
+                }else{
+                    Toast.makeText(getApplicationContext(),"User not registered. Please register before login.",Toast.LENGTH_LONG).show();
+                }
+
+
+                /*if (username!=null && password!=null){
                     startActivity(new Intent(getApplicationContext(), OptionsScreen.class));
                 }else {
                     Toast.makeText(getApplicationContext(),"User not registered. Please register before login.",Toast.LENGTH_LONG).show();
-                }
+                }*/
 
             }
         });

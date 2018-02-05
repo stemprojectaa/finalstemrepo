@@ -10,6 +10,8 @@ public class UserDetailsAndMedicalDetails{
     String username;
     String password;
     String email;
+    String dob;
+    String gender;
     String medicinename;
     String dosageamount;
     String startdate;
@@ -23,10 +25,12 @@ public class UserDetailsAndMedicalDetails{
 
     }
     // constructor
-    public UserDetailsAndMedicalDetails(String username, String password, String email){
+    public UserDetailsAndMedicalDetails(String username, String password, String email,String dob,String gender){
         this.username = username;
         this.password = password;
         this.email = email;
+        this.dob  = dob;
+        this.gender = gender;
     }
 
     // constructor
@@ -87,6 +91,26 @@ public class UserDetailsAndMedicalDetails{
     // setting id
     public void setEmail(String email){
         this.email = email;
+    }
+
+    // getting ID
+    public String getDob(){
+        return this.dob;
+    }
+
+    // setting id
+    public void setDob(String dob){
+        this.dob = dob;
+    }
+
+    // getting ID
+    public String getGender(){
+        return this.gender;
+    }
+
+    // setting id
+    public void setGender(String gender){
+        this.gender = gender;
     }
 
     // getting phone number

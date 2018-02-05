@@ -34,10 +34,13 @@ public class Registration extends AppCompatActivity {
     String username;
     String password;
     String email;
+    String dob;
+    String gender;
 
     UserSessionManagement session;
     static final int READ_BLOCK_SIZE=100;
     DatabaseManagement databaseManagement;
+    UserDetailsAndMedicalDetails userDetailsAndMedicalDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +50,18 @@ public class Registration extends AppCompatActivity {
         session = new UserSessionManagement(getApplicationContext());
         databaseManagement = new DatabaseManagement(this);
 
+
         inputusername = (EditText) findViewById(R.id.username) ;
         inputpassword = (EditText) findViewById(R.id.password) ;
         inputemail = (EditText) findViewById(R.id.email) ;
         inputgender = (EditText) findViewById(R.id.gender) ;
         inputdateofbirth = (EditText) findViewById(R.id.dateofbirth) ;
+
+        userDetailsAndMedicalDetails = new UserDetailsAndMedicalDetails(inputusername.getText().toString()
+                                                                        ,inputpassword.getText().toString()
+                                                                        ,inputemail.getText().toString()
+                                                                        ,inputgender.getText().toString()
+                                                                        ,inputgender.getText().toString());
 
         Button btnRegister = (Button) findViewById(R.id.registration);
         Button btnHome = (Button) findViewById(R.id.btnHome);
@@ -93,8 +103,12 @@ public class Registration extends AppCompatActivity {
         username = inputusername.getText().toString();
         password = inputpassword.getText().toString();
         email = inputemail.getText().toString();
+        dob = inputdateofbirth.getText().toString();
+        gender = inputgender.getText().toString();
 
         session.createUserLoginSession(username,password,email);
+
+        databaseManagement.addUserDetails(new UserDetailsAndMedicalDetails(username,password,email,dob,gender));
 
 
         File innerpath = getApplicationContext().getExternalFilesDir(null);
