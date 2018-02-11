@@ -24,12 +24,14 @@ public class DatabaseManagement extends SQLiteOpenHelper {
     // Contacts table name
     private static final String TABLE_MEDICAL_DETAILS = "UserMedicalDetails";
     private static final String TABLE_USER_DETAILS = "UserDetails";
+    private static final String TABLE_USER_MEDICINE_CODES = "UserMedicineCodes";
 
     // Contacts Table Columns names
     private static final String KEY_USER = "username";
     private static final String KEY_PASSWORD = "password";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_MEDICINE_NAME = "medicinename";
+    private static final String KEY_MEDICINE_CODE = "medicinecode";
     private static final String KEY_DOSAGE = "dosageamount";
     private static final String KEY_START_DATE = "startdate";
     private static final String KEY_START_TIME = "starttime";
@@ -37,6 +39,7 @@ public class DatabaseManagement extends SQLiteOpenHelper {
     private static final String KEY_HOME_PHONE = "homephone";
     private static final String KEY_DOB = "dateofbirth";
     private static final String KEY_GENDER = "gender";
+
 
 
     public DatabaseManagement(Context context) {
@@ -75,6 +78,28 @@ public class DatabaseManagement extends SQLiteOpenHelper {
                 + ")";
         Log.d("UserTable:",CREATE_USER_TABLE);
         db.execSQL(CREATE_USER_TABLE);
+
+        String CREATE_MEDICINES_TABLE = "CREATE TABLE " + TABLE_USER_MEDICINE_CODES + "("
+                + KEY_CELL_PHONE + " TEXT PRIMARY KEY,"
+                + KEY_MEDICINE_NAME + " TEXT,"
+                + KEY_DOSAGE + " TEXT,"
+                + KEY_MEDICINE_CODE + " TEXT"
+                + ")";
+        Log.d("UserTable:",CREATE_MEDICINES_TABLE);
+        db.execSQL(CREATE_MEDICINES_TABLE);
+
+
+        String INSERT_MEDICINES = "INSERT INTO " + TABLE_USER_MEDICINE_CODES
+                                    + "("
+                                    + KEY_CELL_PHONE + "," + KEY_MEDICINE_NAME + "," + KEY_DOSAGE + "," + KEY_MEDICINE_CODE
+                                    + ") VALUES ("
+                                    + "408-667-6907" + ",Tylenol"+ ",10Ml" + "T10ML"
+                                    + ")";
+        Log.d("Insert Medicine:",INSERT_MEDICINES);
+        db.execSQL(INSERT_MEDICINES);
+
+
+
     }
 
     // Upgrading database

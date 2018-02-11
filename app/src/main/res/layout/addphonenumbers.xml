@@ -113,6 +113,16 @@
         android:textColor="#F7FF1C" />
 
     <Button
+        android:id="@+id/btnMySchedule"
+        android:layout_width="130dp"
+        android:layout_height="30dp"
+        android:layout_alignTop="@+id/btnHome"
+        android:layout_toEndOf="@+id/startTime"
+        android:background="@drawable/button_shape"
+        android:text="My Schedule"
+        android:textColor="#F7FF1C" />
+
+    <!--<Button
         android:id="@+id/btnTakeImage"
         android:layout_width="130dp"
         android:layout_height="30dp"
@@ -121,6 +131,7 @@
         android:background="@drawable/button_shape"
         android:text="Take Image"
         android:textColor="#F7FF1C" />
+        -->
 
     <!--
     <Button

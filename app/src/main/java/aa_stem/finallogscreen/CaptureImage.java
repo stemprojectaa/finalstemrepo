@@ -3,6 +3,7 @@ package aa_stem.finallogscreen;
 import android.*;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.res.AssetManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -18,12 +19,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.graphics.Bitmap;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.io.File;
+import java.io.IOException;
+import android.os.Environment;
+import com.googlecode.tesseract.android.TessBaseAPI;
+
 
 public class CaptureImage extends AppCompatActivity {
 
@@ -40,6 +52,11 @@ public class CaptureImage extends AppCompatActivity {
     String cell_phone;
     String phoneNo;
     String homePhoneNo;
+    Intent saveImage;
+    String mCurrentPhotoPath;
+    Bitmap imagePhoto;
+    private TessBaseAPI mTess;
+    String datapath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +74,15 @@ public class CaptureImage extends AppCompatActivity {
         start_Time = medicalDetails.get(UserSessionManagement.KEY_START_TIME);
         home_phone = medicalDetails.get(UserSessionManagement.KEY_HOME_PHONE);
         cell_phone = medicalDetails.get(UserSessionManagement.KEY_CELL_PHONE);
+
+        //initialize Tesseract API
+        String language = "eng";
+        datapath = getFilesDir()+ "/tesseract/";
+        mTess = new TessBaseAPI();
+
+        checkFile(new File(datapath + "tessdata/"));
+
+        mTess.init(datapath, language);
 
         Button btnHome = (Button) findViewById(R.id.btnHome);
 
@@ -131,6 +157,12 @@ public class CaptureImage extends AppCompatActivity {
                 alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP,time,1000*60*1,alarmIntent);
                 */
 
+                /* convert time to milliseconds
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(mYear, mMonth, mDay, mHour, mMinute, 0);
+                long millisecondTime = calendar.getTimeInMillis();
+                Log.d("Milliseconds is :", Long.toString(millisecondTime));
+                */
 
                 //End of AlarmService
 
@@ -180,7 +212,7 @@ public class CaptureImage extends AppCompatActivity {
                 alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialogInterface, int which) {
-                        Intent i = new Intent(getApplicationContext(),SentSMSActivity.class);
+                        Intent i = new Intent(getApplicationContext(),MedicineTakenConfirmation.class);
                         startActivity(i);
                     }
                 });
@@ -209,9 +241,84 @@ public class CaptureImage extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode == CAMERA_REQUEST && resultCode == RESULT_OK){
-            Bitmap imagePhoto = (Bitmap) data.getExtras().get("data");
+            imagePhoto = (Bitmap) data.getExtras().get("data");
             imageView.setImageBitmap(imagePhoto);
+            processImage();
             //session.saveMedValues(null,null,null,null,null,imagePhoto);
         }
+    }
+
+
+    private void checkFile(File dir) {
+        if (!dir.exists()&& dir.mkdirs()){
+            copyFiles();
+        }
+        if(dir.exists()) {
+            String datafilepath = datapath+ "/tessdata/eng.traineddata";
+            File datafile = new File(datafilepath);
+
+            if (!datafile.exists()) {
+                copyFiles();
+            }
+        }
+    }
+
+    private void copyFiles() {
+        try {
+            String filepath = datapath + "/tessdata/eng.traineddata";
+            AssetManager assetManager = getAssets();
+
+            InputStream instream = assetManager.open("tessdata/eng.traineddata");
+            OutputStream outstream = new FileOutputStream(filepath);
+
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = instream.read(buffer)) != -1) {
+                outstream.write(buffer, 0, read);
+            }
+
+
+            outstream.flush();
+            outstream.close();
+            instream.close();
+
+            File file = new File(filepath);
+            if (!file.exists()) {
+                throw new FileNotFoundException();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void processImage(){
+        String OCRresult = null;
+        mTess.setImage(imagePhoto);
+        OCRresult = mTess.getUTF8Text();
+        //TextView OCRTextView = (TextView) findViewById(R.id.OCRTextView);
+        //OCRTextView.setText(OCRresult);
+        Toast.makeText(getApplicationContext(),
+                "Medicine Name \n" +
+                        " captured in image = " + OCRresult + "\n" +
+                        " has been verified.",
+                Toast.LENGTH_LONG).show();
+    }
+
+    public File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 }

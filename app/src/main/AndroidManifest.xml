@@ -46,7 +46,12 @@
         <activity android:name=".MedicalHistory" />
         <activity android:name=".CaptureImage" />
         <activity android:name=".UserDetailsAndMedicalDetails" />
-        <activity android:name=".DatabaseManagement"></activity>
+        <activity android:name=".DatabaseManagement" />
+        <activity android:name=".SetupAlarmAndSMS" />
+
+        <service android:name=".SetupAlarmService" />
+
+        <activity android:name=".TextRecognition"></activity>
     </application>
 
 </manifest>

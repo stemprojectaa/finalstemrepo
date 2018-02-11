@@ -1,0 +1,69 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/lightblue"
+    >
+
+
+    <TextView
+        android:id="@+id/medicineName"
+        android:layout_width="370dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:background="@drawable/edit_text_rounded"
+        android:backgroundTint="@color/colorYellow"
+        android:orientation="vertical"
+        android:textSize="25dp"
+        android:text="Click Button To Capture Image"
+        android:textStyle="italic" />
+
+
+    <Button
+        android:id="@+id/btnTakeImage"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/medicineName"
+        android:layout_marginBottom="32dp"
+        android:layout_marginStart="13dp"
+        android:background="@drawable/button_shape"
+        android:onClick="takeImage"
+        android:text="Take Photo"
+        android:textColor="#F7FF1C" />
+
+    <Button
+        android:id="@+id/btnHome"
+        android:layout_width="110dp"
+        android:layout_height="40dp"
+        android:layout_alignEnd="@+id/medicineName"
+        android:layout_alignTop="@+id/btnTakeImage"
+        android:background="@drawable/button_shape"
+        android:text="Home"
+        android:textColor="#F7FF1C" />
+
+    <Button
+        android:id="@+id/btnSchedule"
+        android:layout_width="130dp"
+        android:layout_height="40dp"
+        android:layout_alignTop="@+id/btnHome"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button_shape"
+        android:text="schedule Alarm"
+        android:textColor="#F7FF1C" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
+</RelativeLayout>
+
+
+
+
+
+

@@ -60,6 +60,7 @@ public class CreatePhoneNumber extends AppCompatActivity {
     private PendingIntent alarmIntent;
     UserSessionManagement session;
     DatabaseManagement databaseManagement;
+    UserDetailsAndMedicalDetails userDetailsAndMedicalDetails;
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -79,6 +80,7 @@ public class CreatePhoneNumber extends AppCompatActivity {
 
         session = new UserSessionManagement(getApplicationContext());
         databaseManagement = new DatabaseManagement(this);
+        userDetailsAndMedicalDetails = new UserDetailsAndMedicalDetails();
 
         HashMap<String,String> medicalDetails = session.getMedicalDetails();
         medicine_name = medicalDetails.get(UserSessionManagement.KEY_MEDICINE_NAME);
@@ -94,6 +96,7 @@ public class CreatePhoneNumber extends AppCompatActivity {
 
         Button btnHome = (Button) findViewById(R.id.btnHome);
         Button btnImage = (Button) findViewById(R.id.btnTakeImage);
+        Button btnMyScheudule = (Button) findViewById(R.id.btnMySchedule);
 
         /*
         Button btnSchedule = (Button) findViewById(R.id.btnSchedule);
@@ -214,6 +217,31 @@ public class CreatePhoneNumber extends AppCompatActivity {
             }
         });
 
+
+        btnMyScheudule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(CreatePhoneNumber.this);
+
+                alertDialog.setTitle("Create Alert");
+                alertDialog.setMessage("Please choose options in taking your medicines here..");
+
+
+                alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        Intent i = new Intent(getApplicationContext(),SentSMSActivity.class);
+                        //Intent i = new Intent(getApplicationContext(),SetupAlarmAndSMS.class);
+                        startActivity(i);
+                    }
+                });
+
+                alertDialog.show();
+            }
+        });
+
+
+       /*Changed this on 2-7-2018 to go directly to SentSMSActivity Screen
         //button click event
         btnImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,6 +256,7 @@ public class CreatePhoneNumber extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
                         Intent i = new Intent(getApplicationContext(),CaptureImage.class);
+                        //Intent i = new Intent(getApplicationContext(),SetupAlarmAndSMS.class);
                         startActivity(i);
                     }
                 });
@@ -235,7 +264,7 @@ public class CreatePhoneNumber extends AppCompatActivity {
                 alertDialog.show();
             }
         });
-
+        */
 
 
     }
@@ -244,6 +273,11 @@ public class CreatePhoneNumber extends AppCompatActivity {
         home_phone = inputhomehome.getText().toString();
         cell_phone = inputcellphone.getText().toString();
         session.savePhoneValues(home_phone,cell_phone);
+
+        userDetailsAndMedicalDetails.setCellphone(cell_phone);
+        userDetailsAndMedicalDetails.setStartdate(start_Date);
+        userDetailsAndMedicalDetails.setStarttime(start_Time);
+
         databaseManagement.addMedDetails( new UserDetailsAndMedicalDetails(
                                         session.getKeyName()
                                         ,session.getKeyPassword()

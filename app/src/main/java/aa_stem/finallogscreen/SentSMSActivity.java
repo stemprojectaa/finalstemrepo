@@ -138,13 +138,13 @@ public class SentSMSActivity extends AppCompatActivity {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(SentSMSActivity.this);
 
                 alertDialog.setTitle("Medicine Taken Alert");
-                alertDialog.setMessage("Thanks for taking medicine. Please continue..");
+                alertDialog.setMessage("Thanks for choosing to take your medicine. Please continue to take an Image..");
 
 
                 alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
-                        Intent i = new Intent(getApplicationContext(),MedicineTakenConfirmation.class);
+                        Intent i = new Intent(getApplicationContext(),CaptureImage.class);
                         startActivity(i);
                     }
                 });
